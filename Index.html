@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Darin's Dessert</title>
+
+<style>
+    body {
+        font-family: "Times New Roman", Arial, sans-serif;
+        background-color: #fffbea;
+        margin: 0;
+        padding: 0;
+        color: #3a3a3a;
+    }
+
+    header {
+        background-color: #ffd84d;
+        padding: 25px;
+        text-align: center;
+        color: #3a3a3a;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2.7rem;
+        font-weight: bold;
+    }
+    header p {
+        margin-top: 5px;
+        font-style: italic;
+        font-size: 1.2rem;
+    }
+
+    .products {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 30px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background: white;
+        width: 260px;
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    .card h3 {
+        margin: 8px 0;
+        font-size: 1.4rem;
+    }
+
+    .price {
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        color: #d28a00;
+    }
+
+    .card button {
+        background-color: #ffd84d;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    #cartBtn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background-color: #ffea80;
+        border: none;
+        padding: 15px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #popup {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        width: 320px;
+        border-radius: 12px;
+        font-family: Arial, sans-serif;
+    }
+
+    .popup-content input, 
+    .popup-content select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+
+    .popup-content button {
+        background-color: #ffd84d;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Darin's Dessert</h1>
+    <p>sweet moments in every bite</p>
+</header>
+
+<div class="products">
+
+    <!-- Mixed Cookies Box -->
+    <div class="card">
+        <h3>Mixed Cookies Box</h3>
+        <p class="price">Harga: Rp 50.000</p>
+        <p>Box berisi cookies pilihan premium.</p>
+        <button onclick="addToCart('Mixed Cookies Box - Rp 50.000')">Tambah ke Keranjang</button>
+    </div>
+
+    <!-- Brownies Bites -->
+    <div class="card">
+        <h3>Brownies Bites</h3>
+        <p class="price">Harga: Rp 30.000</p>
+        <p>Bites brownies lembut dan fudgy.</p>
+        <button onclick="addToCart('Brownies Bites - Rp 30.000')">Tambah ke Keranjang</button>
+    </div>
+
+</div>
+
+<button id="cartBtn" onclick="openPopup()">Keranjang</button>
+
+<!-- POPUP -->
+<div id="popup">
+    <div class="popup-content">
+        <h3>Form Pemesanan</h3>
+        <p id="orderList"></p>
+
+        <input type="text" id="nama" placeholder="Nama" />
+        <input type="text" id="alamat" placeholder="Alamat" />
+
+        <select id="payment">
+            <option value="Transfer">Transfer</option>
+            <option value="COD">COD</option>
+        </select>
+
+        <button onclick="sendWA()">Pesan via WhatsApp</button>
+        <button onclick="closePopup()" style="background:#ccc;">Tutup</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+
+    function addToCart(item) {
+        cart.push(item);
+        alert(item + " ditambahkan ke keranjang!");
+    }
+
+    function openPopup() {
+        document.getElementById('popup').style.display = 'flex';
+
+        let list = cart.length ? cart.join("%0A- ") : "Keranjang kosong";
+        document.getElementById('orderList').innerHTML = "<strong>Pesanan:</strong><br>- " + list.replace(/%0A/g, "<br>");
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function sendWA() {
+        let nama = document.getElementById('nama').value;
+        let alamat = document.getElementById('alamat').value;
+        let payment = document.getElementById('payment').value;
+
+        if (!nama || !alamat || cart.length === 0) {
+            alert("Lengkapi form dan masukkan produk!");
+            return;
+        }
+
+        let message =
+            `Halo, saya ingin pesan:%0A` +
+            cart.map(item => "- " + item).join("%0A") +
+            `%0A%0ANama: ${nama}%0AAlamat: ${alamat}%0AMetode Pembayaran: ${payment}`;
+
+        window.open(`https://wa.me/6282169861289?text=${message}`);
+    }
+</script>
+
+</body>
+</html>
